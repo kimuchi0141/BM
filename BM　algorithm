@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAXPAT 256
+
+// compad関数とcompdd関数のプロトタイプ宣言を追加
+void compd(char p[], int d[], int m); // compadからcompdに修正
+void compdd(char p[], int dd[], int m);
+
+// max関数とmin関数の定義
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int min(int a, int b) {
+    return a < b ? a : b;
+}
+
+void bm(char p[], char t[], int m, int n) {
+    int i, j, d[256], dd[MAXPAT];
+    
+    i = j = m;
+    compd(p, d, m); // 関数名をcompdに修正
+    compdd(p, dd, m);
+    while (i >= 1 && j <= n) {
+        if (p[i] == t[j]) {
+            i--;
+            j--;
+        } else {
+            j = j + max(d[t[j]], dd[i]); // maxを使用して修正
+            i = m;
+        }
+    }
+    if (i == 0)
+        printf("Found at %d\n", j + 1);
+    else
+        printf("Not found\n");
+}
+
+void compd(char p[], int d[], int m) {
+    int i;
+    
+    for (i = 0; i <= 255; i++) // 256を超えないように修正
+       d[i] = m;
+    for (i = 1; i < m; i++) // mを超えないように修正
+       d[p[i]] = m - i;
+}
+
+void compdd(char p[], int dd[], int m) {
+    int f[MAXPAT];
+    int i, j, k;
+    
+    for (i = 1; i <= m; i++)
+         dd[i] = 2 * m - i;
+    
+    j = m;
+    i = m + 1;
+    f[m] = m + 1;
+    while (j > 0)
+        if (i == m + 1 || p[i] == p[j])
+            f[--j] = --i;
+        else {
+            dd[i] = min(dd[i], m - j); // minを使用して修正
+            i = f[i];
+        }
+    for (k = 1; k <= m; k++) {
+        if (k > i) // k > i であることを確認
+            i = f[i];
+        dd[k] = min(dd[k], m + i - k); // minを使用して修正
+    }
+}
+
+int main() {
+    char A[1000];
+    char B[1000];
+    scanf("%s",A);
+    scanf("%s",B);
+    int text_length = strlen(A);
+    int pattern_length = strlen(B);
+    bm(B, A, pattern_length, text_length);
+    return 0;
+}
