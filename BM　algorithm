@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <string.h>
-
 #define MAXPAT 256
-
 // compad関数とcompdd関数のプロトタイプ宣言を追加
 void compd(char p[], int d[], int m); // compadからcompdに修正
 void compdd(char p[], int dd[], int m);
-
 // max関数とmin関数の定義
 int max(int a, int b) {
     return a > b ? a : b;
